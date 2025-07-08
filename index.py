@@ -15,7 +15,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 # 
 from selenium.webdriver.support import expected_conditions as ec
 import time
-
+from typing import NewType
 # chrome driver path
 PATH = r"C:\Program Files\chromedriver-win64\chromedriver.exe"
 
@@ -33,7 +33,7 @@ driver = webdriver.Chrome(service=service, options=options)
 driver.get("https://www.saucedemo.com/")
 
 # === FUNCTIONS ===
-def find_el(by: str, element_identifier: str, search_method = ec.presence_of_element_located):
+def find_el(by: str, element_identifier: str, search_method):
     try:
         return WebDriverWait(driver, 10).until(
             search_method((by, element_identifier))
@@ -41,17 +41,30 @@ def find_el(by: str, element_identifier: str, search_method = ec.presence_of_ele
     except Exception as e:
         print(f"Exception detected:\n{e}")
         sys.exit()
+
+
+def type_text(text: str, by: str, element_identifier: str, search_method):
+    text_field = find_el(by, element_identifier, search_method)
+    text_field.clear()
+    text_field.send_keys(text)
+
 # === LOGIN PAGE === 
 # Filling the user name field
-textInput = driver.find_element(By.ID, "user-name")
-textInput.send_keys("standard_user")
+type_text("standard_user", By.ID, "user-name", ec.presence_of_element_located)
+# text_field = driver.find_element(By.ID, "user-name")
+# text_field.clear()
+# text_field.send_keys("standard_user")
 
 # Filling the password field
-textInput = driver.find_element(By.ID, "password")
-textInput.send_keys("secret_sauce")
+type_text("secret_sauce", By.ID, "password", ec.presence_of_element_located)
+# text_field = driver.find_element(By.ID, "password")
+# text_field.clear()
+# text_field.send_keys("secret_sauce")
 
 # Clicking on the login button
-driver.find_element(By.ID, "login-button").click()
+login_btn = find_el(By.ID, "login-button", ec.element_to_be_clickable)
+login_btn.click()
+#driver.find_element(By.ID, "login-button").click()
 
 # === IVENTORY PAGE ===
 
@@ -81,13 +94,5 @@ continue_btn.click()
 # === CHECKOUT OVERVIEW ===
 finish_btn = find_el(By.ID, "finish", ec.element_to_be_clickable)
 finish_btn.click()
-# try:
-#     root2 = WebDriverWait(driver, 10).until(
-#         ec.element_to_be_clickable((By.ID, "finish"))
-#     )
-#     root2.click()
-# except Exception as e:
-#     print(f"Error while clicking on the finish button:\n${e}")
-#     sys.exit()
 
 time.sleep(20)
