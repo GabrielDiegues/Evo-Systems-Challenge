@@ -33,7 +33,7 @@ driver = webdriver.Chrome(service=service, options=options)
 driver.get("https://www.saucedemo.com/")
 
 # === FUNCTIONS ===
-def find_element(by: str, element_identifier: str, search_method = ec.presence_of_element_located):
+def find_el(by: str, element_identifier: str, search_method = ec.presence_of_element_located):
     try:
         return WebDriverWait(driver, 10).until(
             search_method((by, element_identifier))
@@ -56,30 +56,22 @@ driver.find_element(By.ID, "login-button").click()
 # === IVENTORY PAGE ===
 
 # waiting for the iventory page to load and clicking on the add to cart button
-addBtn = find_element(By.ID, "add-to-cart-sauce-labs-backpack", ec.element_to_be_clickable)
+addBtn = find_el(By.ID, "add-to-cart-sauce-labs-backpack", ec.element_to_be_clickable)
 addBtn.click()
-shopping_cart = find_element(By.CLASS_NAME, "shopping_cart_link", ec.element_to_be_clickable)
+shopping_cart = find_el(By.CLASS_NAME, "shopping_cart_link", ec.element_to_be_clickable)
 shopping_cart.click()
 
-# try:
-#     addBtn = WebDriverWait(driver, 10).until(
-#         ec.presence_of_element_located((By.ID, "add-to-cart-sauce-labs-backpack"))
-#     )
-#     addBtn.click()
-#     driver.find_element(By.CLASS_NAME, "shopping_cart_link").click()
-# except:
-#     print("Error while trying to click on the add to cart button")
-#     sys.exit()
-
 # === CART PAGE ===
-try:
-    checkoutBtn = WebDriverWait(driver, 10).until(
-        ec.presence_of_element_located((By.ID, "checkout"))
-    )
-    checkoutBtn.click()
-except:
-    print("Error while trying to click on the checkout button")
-    sys.exit()
+checkoutBtn = find_el(By.ID, "checkout", ec.presence_of_element_located)
+checkoutBtn.click()
+# try:
+#     checkoutBtn = WebDriverWait(driver, 10).until(
+#         ec.presence_of_element_located((By.ID, "checkout"))
+#     )
+#     checkoutBtn.click()
+# except:
+#     print("Error while trying to click on the checkout button")
+#     sys.exit()
 
 # === CHECKOUT PAGE ===
 try:
