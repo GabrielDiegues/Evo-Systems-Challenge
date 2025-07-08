@@ -78,42 +78,16 @@ zip_field.send_keys("0302")
 continue_btn = find_el(By.ID, "continue", ec.element_to_be_clickable)
 continue_btn.click()
 
-# try:
-#    # name field
-#    first_name_input = WebDriverWait(driver, 10).until(
-#        ec.presence_of_element_located((By.ID, "first-name"))
-#    )
-#    first_name_input.send_keys("fred")
-
-#    # last name field 
-#    last_name_input = WebDriverWait(driver, 10).until(
-#        ec.presence_of_element_located((By.ID, "last-name"))
-#    )
-#    last_name_input.send_keys("Grimmes")
-
-#    # Postal code field
-#    zip_input = WebDriverWait(driver, 10).until(
-#        ec.presence_of_element_located((By.ID, "postal-code"))
-#    )
-#    zip_input.send_keys("324")
-   
-#    continue_btn = WebDriverWait(driver,10).until(
-#         ec.presence_of_element_located((By.ID, "continue"))
-#     )
-#    continue_btn.click()
-
-# except Exception as e:
-#     print(f"Error in the checkout page:\n${e}")
-#     sys.exit()
-
 # === CHECKOUT OVERVIEW ===
-try:
-    root2 = WebDriverWait(driver, 10).until(
-        ec.element_to_be_clickable((By.ID, "finish"))
-    )
-    root2.click()
-except Exception as e:
-    print(f"Error while clicking on the finish button:\n${e}")
-    sys.exit()
+finish_btn = find_el(By.ID, "finish", ec.element_to_be_clickable)
+finish_btn.click()
+# try:
+#     root2 = WebDriverWait(driver, 10).until(
+#         ec.element_to_be_clickable((By.ID, "finish"))
+#     )
+#     root2.click()
+# except Exception as e:
+#     print(f"Error while clicking on the finish button:\n${e}")
+#     sys.exit()
 
 time.sleep(20)
