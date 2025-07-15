@@ -4,13 +4,15 @@ import pages
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 
-
+# === FUNCTION TO GENERATE TEST TO EACH SPECIFIC USER ===
 def generate_test(user):
     def test(self):
         login_page = pages.LoginPage(self.driver)
         self.assertTrue(login_page.is_login_successful(user), f"Login failed for user: {user}")
     return test
 
+
+ # === TEST CLASS ===
 class SauceDemoTests(unittest.TestCase):
     ALL_USER_NAMES = (
         "standard_user", 
@@ -50,7 +52,7 @@ class SauceDemoTests(unittest.TestCase):
     #         self.assertTrue(login_page.is_login_successful(user), f"Login failed for user: {user}")
 
 
-
+# === ADDING THE TEST FUNCTIONS TO THE SauceDemoTests class ===
 for user in SauceDemoTests.ALL_USER_NAMES:
     test_name = f"test_login_with_{user}"
     test = generate_test(user)

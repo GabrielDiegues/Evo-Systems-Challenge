@@ -1,7 +1,6 @@
 from elements import TextInputElement
 from locators import LoginPageLocators
-from base import BasePage
-
+from base import BasePage, BaseElement
 
 
 class LoginPage(BasePage):
@@ -9,12 +8,12 @@ class LoginPage(BasePage):
     password = TextInputElement(LoginPageLocators.PASSWORD_FIELD)
 
 
+
     def is_login_successful(self, user_name):
         try:
             self.user_name = user_name
             self.password = "secret_sauce"
             self.click_button(LoginPageLocators.LOGIN_BUTTON)
-            
-            return True
+            return self.driver.current_url == "https://www.saucedemo.com/inventory.html"
         except:
             return False
