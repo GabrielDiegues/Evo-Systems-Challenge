@@ -48,23 +48,16 @@ def type_text(text: str, by: str, element_identifier: str, search_method):
     text_field.clear()
     text_field.send_keys(text)
 
-# === LOGIN PAGE === 
+# === LOGIN PAGE ===
+ 
 # Filling the user name field
 type_text("standard_user", By.ID, "user-name", ec.presence_of_element_located)
-# text_field = driver.find_element(By.ID, "user-name")
-# text_field.clear()
-# text_field.send_keys("standard_user")
 
 # Filling the password field
 type_text("secret_sauce", By.ID, "password", ec.presence_of_element_located)
-# text_field = driver.find_element(By.ID, "password")
-# text_field.clear()
-# text_field.send_keys("secret_sauce")
 
 # Clicking on the login button
-login_btn = find_el(By.ID, "login-button", ec.element_to_be_clickable)
-login_btn.click()
-#driver.find_element(By.ID, "login-button").click()
+find_el(By.ID, "login-button", ec.element_to_be_clickable).click()
 
 # === IVENTORY PAGE ===
 
