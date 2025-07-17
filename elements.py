@@ -8,7 +8,7 @@ class TextInputElement(BaseElement):
         if not hasattr(obj, 'driver'):
             raise AttributeError("Expected 'driver' attribute in the object")
         
-        text_field = self.find_el(obj.driver)
-        if text_field:
-            text_field.clear()
-            text_field.send_keys(value)
+        TEXT_FIELD = self.find_el(obj.driver, ec.presence_of_element_located, "Failed to load the text field")
+        if TEXT_FIELD:
+            TEXT_FIELD.clear()
+            TEXT_FIELD.send_keys(value)
