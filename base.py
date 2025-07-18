@@ -26,11 +26,11 @@ class BasePage():
     
 
 class BaseItems(BasePage):
-    def find_items(self, available_items_locator: tuple, item_locator: tuple, except_message: str):
+    def find_items(self, available_items_locator: tuple, except_message: str):
         available_items = BaseElement(available_items_locator).find_el(
             self.driver, ec.presence_of_element_located, except_message
             )
-        items = BaseElement(item_locator).find_el(
+        items = BaseElement(BaseLocators.ITEM).find_el(
             available_items, 
             ec.presence_of_all_elements_located,
             "couldn't access the items",

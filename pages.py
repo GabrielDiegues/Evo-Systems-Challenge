@@ -1,5 +1,5 @@
 from elements import TextInputElement
-from locators import LoginPageLocators, InventoryPageLocators, CartPageLocators
+from locators import LoginPageLocators, InventoryPageLocators, CartPageLocators, BaseLocators
 from base import BasePage, BaseElement, BaseItems
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.remote.webelement import WebElement
@@ -20,52 +20,30 @@ class LoginPage(BasePage):
 class InventoryPage(BaseItems):
 
     def attempt_add_product(self):
-        # inventory_list = BaseElement(InventoryPageLocators.INVENTORY_LIST).find_el(
-        #     self.driver, ec.presence_of_element_located, "couldn't access the iventory list"
-        #     )
-        # items = BaseElement(InventoryPageLocators.ITEM).find_el(
-        #     inventory_list, 
-        #     ec.presence_of_all_elements_located,
-        #     "couldn't access the items",
-        #     multiple=True
-        #     )
-
         items = self.find_items(
-            InventoryPageLocators.INVENTORY_LIST, 
-            InventoryPageLocators.ITEM, 
+            InventoryPageLocators.INVENTORY_LIST,  
             "Couldn't access the iventory list"
             )
-
         for item in items:
-            self.click_button(InventoryPageLocators.PRODUCT_BTN, "Couldn't load the product button", item)
+            self.click_button(BaseLocators.PRODUCT_BTN, "Couldn't load the product button", item)
 
-            # item_btn = BaseElement(InventoryPageLocators.PRODUCT_BTN).find_el(
-            #     item, 
-            #     ec.element_to_be_clickable, 
-            #     "couldn't access the item button"
-            #     )
-            # item_btn.click()
-            item_btn = BaseElement(InventoryPageLocators.PRODUCT_BTN).find_el(
-                item, 
-                ec.element_to_be_clickable, 
-                "couldn't access the item button"
-                )
-            if item_btn.text.strip() == "Remove":
-                CartPage.products_to_remove_btn.append((By.ID,item_btn.get_attribute("id")))
-
-        self.click_button(InventoryPageLocators.SHOPPING_CART_BTN, "Couln't load the cart button")
-
-
-        #
-        # for product in InventoryPageLocators.PRODUCTS_BTN:
-        #     self.click_button(product)
-        # self.click_button(InventoryPageLocators.SHOPPING_CART_BTN)
-
+        self.click_button(InventoryPageLocators.SHOPPING_CART_BTN, "Couldn't load the cart button")
         return self.driver.current_url == "https://www.saucedemo.com/cart.html"
 
 
-class CartPage(BasePage):
-    products_to_remove_btn = []
+class CartPage(BaseItems):
+    def attempt_delete_product(self):
+        items = self.find_items(
+            CartPageLocators.CART_LIST,
+            "Couldn't access the iventory list"
+            )
+        
+        for i in range(len(items) // 2 - 1):
+            self.click_button(BaseLocators.PRODUCT_BTN, "Couldn't load the delete button", items[i])
+        
+        self.click_button(CartPageLocators.CHECKOUT_BTN, "Couldn't load the checkout button")
+        return self.driver.current_url == "https://www.saucedemo.com/checkout-step-one.html"
+    # Delete this function
     def process_cart_step(self, product_buttons: tuple, next_step_button: tuple, url: str):
         for product in product_buttons:
             self.click_button(product, "Couldn't click on the product button")

@@ -23,6 +23,8 @@ def generate_test(user: str):
         #                                                 f"navigation to the cart failed for user: {user}")
 
         # === CART TEST ===
+        cart_page = pages.CartPage(self.driver)
+        self.assertTrue(cart_page.attempt_delete_product(), f"navigation to the checkout failed for user: {user}")
         # self.assertTrue(iventory_page.process_cart_step(CartPageLocators.PRODUCTS_TO_REMOVE_BTN, 
         #                                                 CartPageLocators.CHECKOUT_BTN, 
         #                                                 "https://www.saucedemo.com/checkout-step-one.html"
