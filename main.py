@@ -3,7 +3,8 @@ from selenium import webdriver
 import pages
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
-from locators import CartPageLocators, InventoryPageLocators
+
+
 # === FUNCTION TO GENERATE TEST TO EACH SPECIFIC USER ===
 def generate_test(user: str):
     def test(self: SauceDemoTests):
@@ -15,12 +16,6 @@ def generate_test(user: str):
         # === IVENTORY TEST ===
         inventory_page = pages.InventoryPage(self.driver)
         self.validate_process(inventory_page.attempt_add_product(), "inventory", user)
-        # self.assertTrue(inventory_page.attempt_add_product(), f"navigation to the cart failed for user: {user}")
-        # self.assertTrue(inventory_page.process_cart_step(InventoryPageLocators.PRODUCTS_BTN, 
-        #                                                 InventoryPageLocators.SHOPPING_CART_BTN, 
-        #                                                 "https://www.saucedemo.com/cart.html"
-        #                                                 ), 
-        #                                                 f"navigation to the cart failed for user: {user}")
 
         # === CART TEST ===
         cart_page = pages.CartPage(self.driver)
@@ -52,7 +47,7 @@ class SauceDemoTests(unittest.TestCase):
         )
     # === SETUP AND TEARDOWN FUNCTIONS ===
     def setUp(self):
-        # chrome driver path
+        # chrome driver path (Change it to the path located on your computer)
         self.PATH = r"C:\Program Files\chromedriver-win64\chromedriver.exe"
 
         # === SETUP CHROME ===
@@ -78,13 +73,7 @@ class SauceDemoTests(unittest.TestCase):
         if warning_msg:
             warning_msg = f" (Warning message - {warning_msg})"
         self.assertTrue(is_succedded, f"Process failed at page: {page_name}. failed user: {user_name}{warning_msg}")
-    # === TEST FUNCTIONS ===
-    # @unittest.skip("")
-    # def test_login(self):
-    #     user = ""
-    #     login_page = pages.LoginPage(self.driver)
-    #     warning_msg, login_result = login_page.attempt_login(user)
-    #     self.assertTrue(login_result, f"Login failed for user: {user} (Warning message - {warning_msg})")
+        
 
 # === ADDING THE TEST FUNCTIONS TO THE SauceDemoTests class ===
 for user in SauceDemoTests.ALL_USER_NAMES:

@@ -1,28 +1,29 @@
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
-from locators import BaseLocators, InventoryPageLocators
+from locators import BaseLocators
 from selenium.webdriver.remote.webelement import WebElement
 from typing import overload, Literal
+from typing import Callable
 
 class BasePage():
     def __init__(self, driver: WebDriver):
         self.driver = driver
     
 
-    def click_button(self, locator: tuple, except_msg, element = None):
+    def click_button(self, locator: tuple, except_msg: str, element = None):
         element = element or self.driver
         BUTTON = BaseElement(locator).find_el(element, ec.element_to_be_clickable, except_msg)
         BUTTON.click()
     
 
     def get_warning_message(self) -> tuple[str, bool]:
-        MSG = BaseElement(BaseLocators.WARNING_MESSAGE).find_el(
+        msg = BaseElement(BaseLocators.WARNING_MESSAGE).find_el(
             self.driver, 
             ec.presence_of_element_located, 
             "Couldn't load the warning message"
             )
-        return (MSG.text, False) if MSG else ("", False)
+        return (msg.text, False) if msg else ("", False)
     
 
     @overload
@@ -66,11 +67,10 @@ class BaseElement:
     def find_el(self, driver, search_method, exception_text) -> WebElement: ...
 
 
-    def find_el(self, driver, search_method, exception_text, multiple_el=False):
+    def find_el(self, driver: WebElement, search_method: Callable, exception_text: str, multiple_el=False):
         try:
             return WebDriverWait(driver, 10).until(
                 search_method(self.locator)
             )
         except Exception as e:
-            print(exception_text)
-            print(f"Exception detected:\n{e}\n")
+            print(f"{exception_text}\n{e}")
