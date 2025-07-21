@@ -1,4 +1,4 @@
-````markdown
+
 # Testes Automatizados com Selenium - SauceDemo
 
 Este projeto realiza testes automatizados na aplicação [SauceDemo](https://www.saucedemo.com/) utilizando **Python** e **Selenium WebDriver**, com foco na validação do fluxo de compra e comportamento da interface do usuário.
@@ -92,7 +92,3 @@ python -m unittest -v test_saucedemo.py
 
 Gabriel Diegues Figueiredo Rocha
 Estudante de Engenharia de Software - FIAP
-
-```
-
-```
