@@ -16,7 +16,7 @@ class BasePage():
         BUTTON.click()
     
 
-    def get_warning_message(self):
+    def get_warning_message(self) -> tuple[str, bool]:
         MSG = BaseElement(BaseLocators.WARNING_MESSAGE).find_el(
             self.driver, 
             ec.presence_of_element_located, 
@@ -25,16 +25,31 @@ class BasePage():
         return (MSG.text, False) if MSG else ("", False)
     
 
+    @overload
+    def check_url(self, url: str, warning: Literal[True]) -> tuple[str, bool]: ...
+
+    @overload
+    def check_url(self, url: str) -> bool: ...
+        
+
+
+    def check_url(self, url: str, warning = False):
+        is_url_correct = self.driver.current_url == url
+        if warning:
+            return ("", True) if is_url_correct else self.get_warning_message()
+        return is_url_correct
+    
+
 class BaseItems(BasePage):
     def find_items(self, available_items_locator: tuple, except_message: str):
-        available_items = BaseElement(available_items_locator).find_el(
+        available_items_container = BaseElement(available_items_locator).find_el(
             self.driver, ec.presence_of_element_located, except_message
             )
         items = BaseElement(BaseLocators.ITEM).find_el(
-            available_items, 
+            available_items_container, 
             ec.presence_of_all_elements_located,
             "couldn't access the items",
-            multiple=True
+            multiple_el=True
             )
         
         return items
@@ -45,13 +60,13 @@ class BaseElement:
 
 
     @overload
-    def find_el(self, driver, search_method, exception_text, multiple: Literal[True]) -> list[WebElement]: ...
+    def find_el(self, driver, search_method, exception_text, multiple_el: Literal[True]) -> list[WebElement]: ...
 
     @overload
     def find_el(self, driver, search_method, exception_text) -> WebElement: ...
 
 
-    def find_el(self, driver, search_method, exception_text, multiple=False):
+    def find_el(self, driver, search_method, exception_text, multiple_el=False):
         try:
             return WebDriverWait(driver, 10).until(
                 search_method(self.locator)

@@ -1,5 +1,5 @@
 from elements import TextInputElement
-from locators import LoginPageLocators, InventoryPageLocators, CartPageLocators, BaseLocators
+from locators import *
 from base import BasePage, BaseElement, BaseItems
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.remote.webelement import WebElement
@@ -14,8 +14,7 @@ class LoginPage(BasePage):
         self.user_name = user_name
         self.password = "secret_sauce"
         self.click_button(LoginPageLocators.LOGIN_BTN, "Couldn't click on the login button")
-        return ("", True) if self.driver.current_url == "https://www.saucedemo.com/inventory.html" else self.get_warning_message()
-
+        return self.check_url("https://www.saucedemo.com/inventory.html", True)
 
 class InventoryPage(BaseItems):
 
@@ -43,9 +42,41 @@ class CartPage(BaseItems):
         
         self.click_button(CartPageLocators.CHECKOUT_BTN, "Couldn't load the checkout button")
         return self.driver.current_url == "https://www.saucedemo.com/checkout-step-one.html"
-    # Delete this function
-    def process_cart_step(self, product_buttons: tuple, next_step_button: tuple, url: str):
-        for product in product_buttons:
-            self.click_button(product, "Couldn't click on the product button")
-        self.click_button(next_step_button, "couldn't click on the next step button")
-        return self.driver.current_url == url
+    
+
+class CheckoutOnePage(BasePage):
+    first_name = TextInputElement(CheckoutOneLocators.FIRST_NAME_FIELD)
+    last_name = TextInputElement(CheckoutOneLocators.LAST_NAME_FIELD)
+    postal_code = TextInputElement(CheckoutOneLocators.ZIP_FIELD)
+
+    def attempt_fill_info(self):
+        self.first_name = "Gabriel"
+        self.last_name = "Rocha"
+        self.postal_code = "0457"
+        self.click_button(CheckoutOneLocators.CONTINUE_BTN, "Couldn't click on the continue button")
+        return self.check_url("https://www.saucedemo.com/checkout-step-two.html", True)
+
+
+class CheckoutTwoPage(BasePage):
+    def attempt_finish_order(self):
+        self.click_button(CheckoutTwoLocators.FINISH_BTN, "Couldn't click on the finish button")
+        return self.check_url("https://www.saucedemo.com/checkout-complete.html")
+
+
+class CheckoutCompletePage(BasePage, BaseElement):
+    def is_order_complete(self):
+        CONTAINER = BaseElement(CheckoutCompleteLocators.CONTAINER).find_el(
+            self.driver, 
+            ec.presence_of_element_located, 
+            "Couldn't find Checkout complete container"
+            )
+        HEADER_TXT = BaseElement(CheckoutCompleteLocators.COMPLETE_HEADER).find_el(
+            CONTAINER,
+            ec.presence_of_element_located,
+            "Couldn't find the confimation header message"
+        )
+        DIV_TXT = BaseElement(CheckoutCompleteLocators.COMPLETE_TEXT).find_el(
+            CONTAINER, ec.presence_of_element_located,
+            "Couldn't find confirmation text message"
+        )
+        return bool(HEADER_TXT.text and DIV_TXT.text)
