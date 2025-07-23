@@ -77,13 +77,13 @@ pip install -r requirements.txt
 Execute o seguinte comando no terminal:
 
 ```bash
-python -m unittest test_saucedemo.py
+python -m unittest main.py
 ```
 
 Para exibir mais detalhes dos testes:
 
 ```bash
-python -m unittest -v test_saucedemo.py
+python -m unittest -v main.py
 ```
 
 ---
